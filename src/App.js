@@ -2,11 +2,17 @@ import React, { Component } from 'react';
 import { SketchPicker } from 'react-color';
 import Logo from "./Logo"
 import './App.css';
+import firebase from "./firebase"
 
 class App extends Component {
   state = {
     background: "#013801",
     foreground: "#fafcfa"
+  }
+
+  componentDidMount(){
+    firebase.db.collection("colors").doc("DY4MmEGANWaDyVYaxH6i").get()
+      .then(doc => this.setState(doc.data()))
   }
 
   handleChange = (color, name) => {
