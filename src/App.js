@@ -27,19 +27,21 @@ class App extends Component {
       <div className="App">
         <Logo {...this.state}/>
         <div>
-          <div>
-            <h3>Background</h3>
-            <SketchPicker
-              color={ this.state.background }
-              onChangeComplete={(color) => this.handleChange(color, "background")}
-            />
-          </div>
-          <div>
-          <h3>Foreground</h3>
-            <SketchPicker
-              color={ this.state.foreground }
-              onChangeComplete={(color) => this.handleChange(color, "foreground")}
-            />
+          <div className="color-pickers">
+            <div>
+              <h3>Background</h3>
+              <SketchPicker
+                color={ this.state.background }
+                onChangeComplete={(color) => this.handleChange(color, "background")}
+              />
+            </div>
+            <div>
+            <h3>Foreground</h3>
+              <SketchPicker
+                color={ this.state.foreground }
+                onChangeComplete={(color) => this.handleChange(color, "foreground")}
+              />
+            </div>
           </div>
           <button onClick={this.switch}>Switch Foreground/Background</button>
         </div>
