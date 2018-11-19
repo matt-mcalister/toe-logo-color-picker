@@ -11,7 +11,14 @@ class App extends Component {
 
   handleChange = (color, name) => {
     this.setState({
-      [name]: color
+      [name]: color.hex
+    })
+  }
+
+  switch = (e) => {
+    this.setState({
+      background: this.state.foreground,
+      foreground: this.state.background
     })
   }
 
@@ -20,18 +27,21 @@ class App extends Component {
       <div className="App">
         <Logo {...this.state}/>
         <div>
-          <h3>Background</h3>
-          <SketchPicker
-            color={ this.state.background }
-            onChangeComplete={(color) => this.handleChange(color, "background")}
-          />
-        </div>
-        <div>
-        <h3>Foreground</h3>
-          <SketchPicker
-            color={ this.state.foreground }
-            onChangeComplete={(color) => this.handleChange(color, "foreground")}
-          />
+          <div>
+            <h3>Background</h3>
+            <SketchPicker
+              color={ this.state.background }
+              onChangeComplete={(color) => this.handleChange(color, "background")}
+            />
+          </div>
+          <div>
+          <h3>Foreground</h3>
+            <SketchPicker
+              color={ this.state.foreground }
+              onChangeComplete={(color) => this.handleChange(color, "foreground")}
+            />
+          </div>
+          <button onClick={this.switch}>Switch Foreground/Background</button>
         </div>
       </div>
     );
