@@ -1,18 +1,25 @@
 import React, { Component } from 'react';
 import { SketchPicker } from 'react-color';
 import Logo from "./Logo"
+import SavedList from "./SavedList"
 import './App.css';
 import firebase from "./firebase"
 
 class App extends Component {
   state = {
+    note: "",
     background: "#013801",
-    foreground: "#fafcfa"
+    foreground: "#fafcfa",
+    saved: {}
   }
 
   componentDidMount(){
-    firebase.db.collection("colors").doc("DY4MmEGANWaDyVYaxH6i").get()
-      .then(doc => this.setState(doc.data()))
+    const saved = {}
+    firebase.db.collection("colors").get()
+      .then(payload => payload.docs.forEach(doc => saved[doc.data().id] = doc.data()))
+      .then(() => this.setState({
+        saved
+      }))
   }
 
   handleChange = (color, name) => {
@@ -25,6 +32,34 @@ class App extends Component {
     this.setState({
       background: this.state.foreground,
       foreground: this.state.background
+    })
+  }
+
+  handleChange = (e) => {
+    this.setState({
+      note: e.target.value
+    })
+  }
+
+  saveColor = (e) => {
+    e.preventDefault()
+    const { note, background, foreground } = this.state
+    const newColorRef = firebase.db.collection('colors').doc()
+    const newColor = {note, background, foreground, id: newColorRef.id}
+    newColorRef.set(newColor)
+      .then(() => {
+        const saved = {...this.state.saved}
+        saved[newColorRef.id] = newColor
+        this.setState({
+          saved
+        })
+      })
+  }
+
+  selectSaved = (background, foreground) => {
+    this.setState({
+      background,
+      foreground
     })
   }
 
@@ -48,8 +83,16 @@ class App extends Component {
                 onChangeComplete={(color) => this.handleChange(color, "foreground")}
               />
             </div>
+            <div>
+            <h3>Saved</h3>
+            <SavedList saved={Object.values(this.state.saved)} selectSaved={this.selectSaved}/>
+            </div>
           </div>
           <button onClick={this.switch}>Switch Foreground/Background</button>
+          <form onSubmit={this.saveColor}>
+            <input type="text" value={this.state.note} onChange={this.handleChange}/>
+            <input type="submit" value="Save Color Combo" />
+          </form>
         </div>
       </div>
     );
