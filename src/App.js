@@ -35,7 +35,7 @@ class App extends Component {
     })
   }
 
-  handleChange = (e) => {
+  handleFormChange = (e) => {
     this.setState({
       note: e.target.value
     })
@@ -51,6 +51,7 @@ class App extends Component {
         const saved = {...this.state.saved}
         saved[newColorRef.id] = newColor
         this.setState({
+          note: "",
           saved
         })
       })
@@ -90,7 +91,7 @@ class App extends Component {
           </div>
           <button onClick={this.switch}>Switch Foreground/Background</button>
           <form onSubmit={this.saveColor}>
-            <input type="text" value={this.state.note} onChange={this.handleChange}/>
+            <input type="text" value={this.state.note} onChange={this.handleFormChange}/>
             <input type="submit" value="Save Color Combo" />
           </form>
         </div>
